@@ -1,0 +1,13 @@
+{
+	"name": "mikulas/airbank-parser",
+	"description": "airbank internet banking parser",
+	"authors": [{"name": "Mikulas Dite"}],
+	"license": ["BSD-3"],
+	"require": {
+		"php": ">=5.4.0",
+		"shark/simple_html_dom": "dev-master"
+	},
+	"autoload": {
+		"files": ["airbank.php"]
+	}
+}

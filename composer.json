@@ -5,7 +5,7 @@
 	"license": ["BSD-3"],
 	"require": {
 		"php": ">=5.4.0",
-		"shark/simple_html_dom": "dev-master"
+		"sunra/php-simple-html-dom-parser": "dev-master"
 	},
 	"autoload": {
 		"files": ["airbank.php"]

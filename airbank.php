@@ -1,5 +1,9 @@
 <?php
 
+namespace Mikulas;
+
+
+
 class Airbank
 {
 
@@ -145,7 +149,7 @@ class Airbank
 		$res = curl_exec($c);
 		curl_close($c);
 
-		return str_get_html($res);
+		return \Sunra\PhpSimple\HtmlDomParser::str_get_html($res);
 	}
 
 

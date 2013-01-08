@@ -42,6 +42,38 @@ class Airbank
 
 
 
+	public function getLimits()
+	{
+		$onclick = $this->html->find("#idec")[0]->onclick;
+		$match = [];
+		preg_match("~wicketAjaxGet\('\?x=(?P<x>[^']+)',~si", $onclick, $match);
+		$xml = $this->getPage($match['x']);
+		// not html but xml response, just parse it
+		$match = [];
+		preg_match('~
+			</tr><tr>\s*
+				<td\ class="first">\s*
+					.*?
+				</td>\s*
+				<td>\s*
+					<div\ class="cmpInner\ right">\s*
+						(?P<max>.*?)\s*
+					</div>\s*
+				</td>\s*
+				<td\ class="last">\s*
+					<div\ class="cmpInner\ right">\s*
+						(?P<available>.*?)\s*
+					</div>\s*
+				</td>
+			~ixsm', $xml, $match);
+		return [
+			'max' => $this->parseAmount($match['max']),
+			'available' => $this->parseAmount($match['available']),
+		];
+	}
+
+
+
 	/**
 	 * @return string User-set account name
 	 */
@@ -128,6 +160,7 @@ class Airbank
 		];
 		if ($ajax) {
 			$headers[] = 'Wicket-Ajax:true';
+			$headers[] = 'Wicket-FocusedElementId:id105';
 		}
 
 		curl_setopt_array($c, [
@@ -135,7 +168,7 @@ class Airbank
 			CURLOPT_USERAGENT => 'Airbank_parser/1.0',
 			CURLOPT_POST => (bool) count($post),
 			CURLOPT_FOLLOWLOCATION => TRUE,
-			CURLOPT_HEADER => TRUE,
+			CURLOPT_HEADER => FALSE,
 			CURLOPT_RETURNTRANSFER => TRUE,
 			CURLOPT_COOKIEJAR => $jar,
 			CURLOPT_COOKIEFILE => $jar,
@@ -156,7 +189,7 @@ class Airbank
 
 	private function getPage($x)
 	{
-		$this->getHtml(self::URL_IB, ['x' => $x, 'random' => $this->getRandom()], [], TRUE);
+		return $this->getHtml(self::URL_IB, ['x' => $x, 'random' => $this->getRandom()], [], TRUE);
 	}
 
 

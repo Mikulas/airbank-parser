@@ -121,11 +121,19 @@ class Airbank
 	{
 		$ts = [];
 		foreach ($this->html->find('table.mhtTableLinks tr') as $t) {
+			$node = $t->find('.uiW240 div div');
+			$note = trim(isset($node[2]) ? $node[2]->plaintext : $node[1]->plaintext);
+			if (strlen(preg_replace('![^A-Z]+!', '', $note)) > strlen(preg_replace('![^a-z]+!', '', $note))) {
+				$note = ucWords(strtolower($note));
+			}
+			$note = str_replace('Itunes', 'iTunes', $note);
+			$note = preg_replace('~\s+,~', ',', $note);
+
 			$ts[] = [
 				'group' => trim($t->find('.uiW80')[0]->plaintext),
 				'date' => trim($t->find('.uiW80')[1]->plaintext),
 				'account' => trim($t->find('.uiW240 div div')[0]->plaintext),
-				'note' => trim($t->find('.uiW240 div div')[1]->plaintext),
+				'note' => $note,
 				'amount' => $this->parseAmount(trim($t->find('.uiW120')[0]->plaintext)),
 			];
 		}

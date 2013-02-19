@@ -29,7 +29,7 @@ class Airbank
 		$html = $this->getHtml(self::URL_LOGIN);
 		$onclick = $html->find('#id27')[0]->onclick;
 		$match = [];
-		preg_match("~wicketSubmitFormById\('idc',\s+'\?x=(?P<x>[^']+)',~si", $onclick, $match);
+		preg_match("~wicketSubmitFormById\('\w+',\s+'\?x=(?P<x>[^']+)',~si", $onclick, $match);
 
 		// post login
 		$this->html = $this->getHtml(self::URL_LOGIN, ['x' => $match['x'], 'random' => $this->getRandom()], [
